@@ -71,13 +71,13 @@ export default class MyPlugin extends Plugin {
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
-		this.registerDomEvent(document, 'keydown', (evt: KeyboardEvent) => {
+		this.registerDomEvent(document, 'keyup', (evt: KeyboardEvent) => {
 			// Check if no alt or ctrl key? https://developer.mozilla.org/en-US/docs/Web/API/Element/keydown_event
 			if (evt.key == "]" && view) {
 				const location = view.editor.getCursor("anchor");
 				const rowValue = view.editor.getLine(location.line);
 				// Regex to check if checkbox is inside table
-				const regex = /\|.*- \[ \].*\|/
+				const regex = /\|.*- \[[\s]*\].*\|/;
 				console.log(regex.test(rowValue))
 			}
 		});
