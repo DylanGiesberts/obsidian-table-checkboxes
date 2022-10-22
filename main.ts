@@ -1,4 +1,5 @@
 import { App, Editor, MarkdownEditView, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { json } from 'stream/consumers';
 
 // Remember to rename these classes and interfaces!
 
@@ -64,8 +65,6 @@ export default class MyPlugin extends Plugin {
 			}
 		});
 
-		
-
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new SampleSettingTab(this.app, this));
 
@@ -86,11 +85,27 @@ export default class MyPlugin extends Plugin {
 						const start = {...location}; // Shallow copy
 						start.ch -= checkBox[0].length;
 						view.editor.setSelection(start, location);
-						view.editor.replaceSelection('<input type="checkbox"> unchecked');
+						view.editor.replaceSelection('<input type="checkbox" unchecked> ');
 					}
 				}
 			}		
 		});
+
+		this.registerDomEvent(document, "change", (evt: InputEvent) => {
+			console.log(evt);
+			if (evt.target instanceof HTMLInputElement && view) {
+				const checkbox = evt.target
+				if (checkbox.getAttribute("type") == "checkbox") {
+					if (checkbox.checked) {
+						// replace 'unchecked' in editor to 'checked'
+						// Need to get the right checkbox somehow
+					}
+					else {
+
+					}
+				}
+			}
+		})
 
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
 		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
