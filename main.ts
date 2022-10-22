@@ -77,13 +77,19 @@ export default class MyPlugin extends Plugin {
 				const location = view.editor.getCursor("anchor");
 				const rowValue = view.editor.getLine(location.line);
 				// Regex to check if checkbox is inside table
-				const regex = /\|.*- \[[\s]*\].*\|/;
-				console.log(regex.test(rowValue))
-			}
-		});
-		
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);			
+				const tableRegex = /\|.*-[\s]*\[[\s]*\].*\|/;
+				if (rowValue.match(tableRegex)) {
+					// Regex to get the exact checkbox string (from '-' to ']')
+					const checkboxRegex = /-[\s]*[[\s]*]/
+					const checkBox = rowValue.match(checkboxRegex);
+					if (checkBox) {
+						const start = {...location}; // Shallow copy
+						start.ch -= checkBox[0].length;
+						view.editor.setSelection(start, location);
+						view.editor.replaceSelection('<input type="checkbox"> unchecked');
+					}
+				}
+			}		
 		});
 
 		// When registering intervals, this function will automatically clear the interval when the plugin is disabled.
