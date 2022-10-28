@@ -51,7 +51,7 @@ export default class TableCheckboxesPlugin extends Plugin {
 
 	private isHTMLCheckboxInTable(row: String): boolean {
 		// Regex to check if HTML checkbox is inside table
-		const tableRegex = /\|[\s]?<input type="checkbox" (un)?checked>[\s]?.*\|/;
+		const tableRegex = /\|[\s]*<input type="checkbox" (un)?checked>.*\|/;
 		if (row.match(tableRegex)) {
 			return true;
 		}
@@ -60,7 +60,7 @@ export default class TableCheckboxesPlugin extends Plugin {
 
 	// Allow for different amounts of whitespace
 	private getCheckboxLength(row: String) {
-		const checkboxRegex = /-[\s]*[[\s]*]/
+		const checkboxRegex = /-[\s]?[[\s]?]/
 		const checkBox = row.match(checkboxRegex);
 		return checkBox
 	}
@@ -73,7 +73,7 @@ export default class TableCheckboxesPlugin extends Plugin {
 		const textContent = checkbox.parentElement?.textContent;
 		// Regex to check if HTML checkbox AND textContent are inside markdown table
 		// Attempting to construct regex fills me with sorrow
-		const regex = new RegExp(`\|[\\s]?<input type="checkbox" (un)?checked>[\\s]?` + textContent + `\|`);
+		const regex = new RegExp(`\\|[\\s]*<input type="checkbox" (un)?checked>[\\s]*` + textContent + `[\\s]*\\|`);
 		if (page.match(regex)) {
 			if (checkbox.checked) {
 				page = page.replace('<input type="checkbox" unchecked>' + textContent, '<input type="checkbox" checked>' + textContent);
