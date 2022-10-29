@@ -15,8 +15,9 @@ https://user-images.githubusercontent.com/66573865/197360507-251c2586-c11c-412c-
 
 - Whenever a closing bracket `]` is typed, the plugin checks if it's a markdown checkbox `- []` inside of a markdown table `| - [ ] |`.
 - It then changes the checkbox to HTML `<input type="checkbox" unchecked>`.
-- When a HTML checkbox is clicked, the plugin checks if it's inside a markdown table and if so, identifies the right checkbox by the `textContent` of the cell. The plugin then changes the `unchecked` attribute to `checked`, or vice versa.
+- When a HTML checkbox is clicked, the location of the table and then the cell gets identified. The plugin then changes the `unchecked` attribute to `checked`, or vice versa.
 
 ## Known issues
-- Checkboxes in cells with identical textContent get mixed up.
-  - If you know of a better way to detect which checkbox fires an event, please open an issue!
+- Checkboxes in fully identical tables can cause issues.
+
+Empty/duplicate cells should no longer cause issues.
