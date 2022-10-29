@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-table-checkboxes-plugin",
 	"name": "Table HTML Checkboxes",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Converts markdown checkboxes in tables to HTML, and reflects the state upon (un)checking them.",
 	"author": "Dylan Giesberts",
