@@ -2,7 +2,9 @@ import { htmlToMarkdown, MarkdownView, Plugin } from 'obsidian';
 
 export default class TableCheckboxesPlugin extends Plugin {
 	async onload() {
-		const view = this.app.workspace.getActiveViewOfType(MarkdownView); 
+		
+		let view: any = null;
+		this.app.workspace.onLayoutReady(() => view = this.app.workspace.getActiveViewOfType(MarkdownView));
 
 		// Add event listener to replace '-[]' with HTML checkbox inside a table.
 		this.registerDomEvent(document, 'keyup', (evt: KeyboardEvent) => {
