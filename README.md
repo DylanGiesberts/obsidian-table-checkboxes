@@ -5,6 +5,18 @@ This plugin for [Obsidian](https://obsidian.md) replaces markdown checkboxes `-[
 https://user-images.githubusercontent.com/66573865/197360507-251c2586-c11c-412c-a368-7c275ff247a2.mp4
 
 
+## Installing the plugin using BRAT
+
+- Install the BRAT plugin
+1. Open Settings -> Community Plugins
+2. Disable safe mode, if enabled
+3. Browse, and search for "BRAT"
+4. Install the latest version of Obsidian 42 - BRAT
+5. Open BRAT settings (Settings -> Obsidian 42 - BRAT)
+6. Scroll to the Beta Plugin List section
+7. Add Beta Plugin
+8. Specify this repository: git@github.com:bithead2k/obsidian-table-checkboxes.git
+9. Enable the Table HTML Checkboxes plugin (Settings -> Community Plugins)
 
 ## How to use
 
