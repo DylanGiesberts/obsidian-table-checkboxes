@@ -5,6 +5,5 @@
 	"minAppVersion": "0.15.0",
 	"description": "Converts markdown checkboxes in tables to HTML, and reflects the state upon (un)checking them.",
 	"author": "Dylan Giesberts",
-	"authorUrl": "https://dylangiesberts.com",
 	"isDesktopOnly": false
 }
