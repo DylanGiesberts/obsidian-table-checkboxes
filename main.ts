@@ -50,7 +50,7 @@ export default class TableCheckboxesPlugin extends Plugin {
 
 	private isMDCheckboxInTable(viewData: string): boolean {
 		// Regex to check if markdown checkbox is inside table
-		const tableRegex = /^[\s]*\|.*-[\s]?\[[\s]?\].*/m;
+		const tableRegex = /^(\s|>)*\|.*-[\s]?\[[\s]?\].*/m;
 		if (viewData.match(tableRegex)) {
 			return true;
 		}
