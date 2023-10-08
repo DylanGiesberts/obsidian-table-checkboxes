@@ -3,10 +3,8 @@ import { MarkdownView, Plugin } from 'obsidian';
 export default class TableCheckboxesPlugin extends Plugin {
 	async onload() {
 
-		let view: MarkdownView | null = this.app.workspace.getActiveViewOfType(MarkdownView);
-		this.app.workspace.onLayoutReady(() => view = this.app.workspace.getActiveViewOfType(MarkdownView));
-
 		this.registerDomEvent(document, 'keyup', (evt: KeyboardEvent): void => {
+			const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 			if (evt.key == "]" && view) {
 				const location = view.editor.getCursor("anchor");
 				const rowValue = view.editor.getLine(location.line);
@@ -22,10 +20,11 @@ export default class TableCheckboxesPlugin extends Plugin {
 		});
 
 		this.registerDomEvent(document, "change", (evt: InputEvent): void => {
+			const view = this.app.workspace.getActiveViewOfType(MarkdownView);
 			// Check for data-task attribute to ignore markdown checkboxes
-			if (evt.target instanceof HTMLInputElement && view && evt.target.id && evt.target.hasAttribute("data-task") == false) {
+			if (evt.target instanceof HTMLInputElement && view && evt.target.id && evt.target.hasAttribute("data-task") === false) {
 				const checkbox = evt.target;
-				if (checkbox.getAttribute("type") == "checkbox") {
+				if (checkbox.getAttribute("type") === "checkbox") {
 					const page = view.getViewData();
 					const id = evt.target.id;
 					this.toggleCheckbox(page, view, checkbox.checked, id);
