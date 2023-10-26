@@ -1,9 +1,19 @@
-import { Plugin, TFile } from 'obsidian';
+import { Plugin, TFile, WorkspaceWindow } from 'obsidian';
 
 export default class TableCheckboxesPlugin extends Plugin {
-	async onload() {
+	loadEvent = null;
 
-		this.registerDomEvent(activeWindow, "keyup", (evt: KeyboardEvent): void => {
+	async onload() {
+		this.app.workspace.on("window-open", this.setupWindowHandlers);
+		this.setupWindowHandlers(undefined as never, activeWindow);
+	}
+
+	async onunload() {
+		this.app.workspace.off("window-open", this.setupWindowHandlers);
+	}
+
+	private setupWindowHandlers = (_workspaceWindow: WorkspaceWindow, win: Window) => {
+		this.registerDomEvent(win, "keyup", (evt: KeyboardEvent): void => {
 			if (evt.key == "]") {
 				const view = this.app.workspace.activeEditor;
 				if (!view || !view.editor) {
@@ -22,7 +32,7 @@ export default class TableCheckboxesPlugin extends Plugin {
 			}
 		});
 
-		this.registerDomEvent(activeWindow, "change", (evt: InputEvent): void => {
+		this.registerDomEvent(win, "change", (evt: InputEvent): void => {
 			// Check for data-task attribute to ignore markdown checkboxes
 			const changeEl = evt.target as Element;
 			if (changeEl.instanceOf(HTMLInputElement) && changeEl.id && changeEl.hasAttribute("data-task") === false) {
@@ -36,7 +46,7 @@ export default class TableCheckboxesPlugin extends Plugin {
 					this.toggleCheckbox(page, view.file, changeEl.checked, id);
 				}
 			}
-		})
+		});
 	}
 
 	private generateUniqueCheckboxId(page: string): string {
