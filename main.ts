@@ -1,8 +1,6 @@
 import { Plugin, TFile, WorkspaceWindow } from 'obsidian';
 
 export default class TableCheckboxesPlugin extends Plugin {
-	loadEvent = null;
-
 	async onload() {
 		this.app.workspace.on("window-open", this.setupWindowHandlers);
 		this.setupWindowHandlers(undefined as never, activeWindow);
