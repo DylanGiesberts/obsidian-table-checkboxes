@@ -30,7 +30,7 @@ export default class TableCheckboxesPlugin extends Plugin {
 			}
 		});
 
-		this.registerDomEvent(win, "change", (evt: InputEvent): void => {
+		this.registerDomEvent(win, "change", async (evt: InputEvent): Promise<void> => {
 			// Check for data-task attribute to ignore markdown checkboxes
 			const changeEl = evt.target as Element;
 			if (changeEl.instanceOf(HTMLInputElement) && changeEl.id && changeEl.hasAttribute("data-task") === false) {
@@ -39,7 +39,7 @@ export default class TableCheckboxesPlugin extends Plugin {
 					return;
 				}
 				if (changeEl.getAttribute("type") === "checkbox") {
-					const page = view.editor.getDoc().getValue();
+					const page = await this.app.vault.read(view.file);
 					const id = changeEl.id;
 					this.toggleCheckbox(page, view.file, changeEl.checked, id);
 				}
