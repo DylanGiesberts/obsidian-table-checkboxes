@@ -11,14 +11,17 @@ export default class TableCheckboxesPlugin extends Plugin {
 	}
 
 	private setupWindowHandlers = (_workspaceWindow: WorkspaceWindow, win: Window) => {
-		this.registerDomEvent(win, "keyup", (evt: KeyboardEvent): void => {
-			if (evt.key == "]") {
+		this.registerDomEvent(win, "input", (evt: InputEvent): void => {
+			if (evt.data === "]") {
 				const view = this.app.workspace.activeEditor;
 				if (!view || !view.editor) {
 					return;
 				}
 				const location = view.editor.getCursor("anchor");
-				const rowValue = view.editor.getLine(location.line);
+				let rowValue = view.editor.getLine(location.line);
+				const rowChars = rowValue.split(""); // rowValue isn't up to date with the input event, we need to add ] manually.
+				rowChars.splice(location.ch, 0, evt.data); // Luckily we know exactly where ] needs to go
+				rowValue = rowChars.join("");
 				if (this.isMDCheckboxInTable(rowValue)) {
 					const checkBox = this.getCheckboxLength(rowValue);
 					const start = {...location}; // Shallow copy
