@@ -18,10 +18,8 @@ export default class TableCheckboxesPlugin extends Plugin {
 					return;
 				}
 				const location = view.editor.getCursor("anchor");
-				let rowValue = view.editor.getLine(location.line);
-				const rowChars = rowValue.split(""); // rowValue isn't up to date with the input event, we need to add ] manually.
-				rowChars.splice(location.ch, 0, evt.data); // Luckily we know exactly where ] needs to go
-				rowValue = rowChars.join("");
+				location.ch += 1; // Increase char by one because Obsidian autocompletes checkboxes now
+				const rowValue = view.editor.getLine(location.line);
 				if (this.isMDCheckboxInTable(rowValue)) {
 					const checkBox = this.getCheckboxLength(rowValue);
 					const start = {...location}; // Shallow copy
