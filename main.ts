@@ -1,4 +1,4 @@
-import { Plugin, TFile, WorkspaceWindow } from 'obsidian';
+import { EditorPosition, MarkdownFileInfo, Plugin, TFile, WorkspaceWindow } from 'obsidian';
 
 export default class TableCheckboxesPlugin extends Plugin {
 	async onload() {
@@ -21,12 +21,15 @@ export default class TableCheckboxesPlugin extends Plugin {
 				location.ch += 1; // Increase char by one because Obsidian autocompletes checkboxes now
 				const rowValue = view.editor.getLine(location.line);
 				if (this.isMDCheckboxInTable(rowValue)) {
-					const checkBox = this.getCheckboxLength(rowValue);
-					const start = {...location}; // Shallow copy
-					start.ch -= checkBox.length; // Subtract the length from the location of ']'
-					view.editor.setSelection(start, location); // Select '-[]'
-					const checkboxId = this.generateUniqueCheckboxId(view.editor.getDoc().getValue());
-					view.editor.replaceSelection(`<input type="checkbox" unchecked id="${checkboxId}">`); // Replace selection with unchecked HTML checkbox
+					return this.handleCheckboxReplacement(view, rowValue, location, false);
+				} // else we add the ] manually and check again, just in case for other locales
+
+				location.ch -= 1; // Reduce by 1 because we previously added it.
+				const rowChars = rowValue.split(""); // In this case rowValue isn't up to date with the input event, we need to add ] manually.
+				rowChars.splice(location.ch, 0, evt.data); // Luckily we know exactly where ] needs to go
+				const newRowValue = rowChars.join("");
+				if (this.isMDCheckboxInTable(newRowValue)) {
+					this.handleCheckboxReplacement(view, newRowValue, location, true);
 				}
 			}
 		});
@@ -46,6 +49,19 @@ export default class TableCheckboxesPlugin extends Plugin {
 				}
 			}
 		});
+	}
+
+	private handleCheckboxReplacement (view: MarkdownFileInfo, rowValue: string, location: EditorPosition, manuallyAdded: boolean) {
+		if (!view.editor) { return; }
+		const checkBox = this.getCheckboxLength(rowValue);
+		const start = {...location}; // Shallow copy
+		start.ch -= checkBox.length; // Subtract the length from the location of ']'
+		if (manuallyAdded) {
+			start.ch += 1;
+		}
+		view.editor.setSelection(start, location); // Select '-[]'
+		const checkboxId = this.generateUniqueCheckboxId(view.editor.getDoc().getValue());
+		view.editor.replaceSelection(`<input type="checkbox" unchecked id="${checkboxId}">`); // Replace selection with unchecked HTML checkbox
 	}
 
 	private generateUniqueCheckboxId(page: string): string {
